@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFIS - Matching</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .back-btn {
+            margin-bottom: 20px;
+        }
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .results-container {
+            margin-top: 30px;
+            display: none;
+        }
+        .results-container.show {
+            display: block;
+        }
+        .images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .image-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        .image-card.probe {
+            border-color: #667eea;
+            background: #e8ecff;
+        }
+        .image-card.match {
+            border-color: #28a745;
+        }
+        .image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+            background: white;
+            margin-bottom: 10px;
+        }
+        .image-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .score-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+        .rank-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .stats-bar {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="btn btn-primary back-btn">← Voltar</a>
+        
+        <div class="card">
+            <h1>🔍 Matching 1:N</h1>
+            <p class="subtitle">Busca de impressão digital na base de dados</p>
+
+            <div class="form-group">
+                <label>📷 Imagem Probe (PNG)</label>
+                <input type="file" id="probe-image" accept=".png">
+            </div>
+
+            <!-- <div class="form-group">
+                <label>📁 Diretório da Base de Dados</label>
+                <input type="text" id="db-path" placeholder="/caminho/para/base/visual">
+            </div> -->
+
+            <div class="config-grid">
+                <div class="form-group">
+                    <label>⚙️ Modo de Processamento</label>
+                    <select id="mode">
+                        <option value="cpu">CPU (Paralelo)</option>
+                        <option value="gpu" {% if gpu_available %}{% else %}disabled{% endif %}>GPU (Simplificada)</option>
+                        <option value="hybrid" {% if not gpu_available %}disabled{% endif %}>Híbrido (GPU+CPU)</option>
+                        <option value="bozorth3_gpu" {% if bozorth3_available %}selected{% else %}disabled{% endif %}>Bozorth3 GPU (Artigo)</option>
+                    </select>
+                    {% if bozorth3_available %}
+                    <small style="color: #667eea; display: block; margin-top: 5px;">
+                        ✨ Novo: Implementação do artigo científico
+                    </small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group" id="cores-group">
+                    <label>🎯 Núcleos CPU</label>
+                    <select id="cores">
+                        <option value="1">1 núcleo</option>
+                        <option value="4" selected>4 núcleos</option>
+                        <option value="8">8 núcleos</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📊 Top K Resultados</label>
+                    <input type="number" id="top-k" value="5" min="1" max="20">
+                </div>
+
+                <div class="form-group">
+                    <label>🎚️ Threshold Mínimo</label>
+                    <input type="number" id="threshold" value="40" min="0">
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="executeMatching()">
+                Executar Matching
+            </button>
+
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Processando matching...</p>
+            </div>
+
+            <div id="results" class="results-container"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/matching.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  app:
+    image: jeanmag/afis-web-arida:latest
+    container_name: digitais_app
+    ports:
+      - "443:5000"
+    volumes:
+      - "/caminho/no/host/para/minutias:/data/db_minutias_nist"
+      - "/caminho/no/host/para/NIST4_Rotuladas:/data/NIST4_Rotuladas"
+
+    environment:
+      DATABASE_MIN_NIST: "/data/db_minutias_nist"
+      DATABASE_NIST: "/data/NIST4_Rotuladas"

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFIS - Benchmark</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .back-btn { 
+            margin-bottom: 20px; 
+        }
+        .result-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        .result-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+        .metric-label {
+            font-weight: 600;
+            color: #666;
+        }
+        .metric-value {
+            color: #667eea;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="btn btn-primary back-btn">← Voltar</a>
+        
+        <div class="card">
+            <h1>📊 Benchmark de Performance</h1>
+            <p class="subtitle">Teste de velocidade: CPU vs GPU</p>
+
+            <div class="form-group">
+                <label>🔎 Probe (PNG)</label>
+                <input type="file" id="bench-probe" accept=".png">
+            </div>
+
+            <div class="form-group">
+                <label>📁 Diretório da Base</label>
+                <input type="text" id="bench-db" placeholder="/caminho/para/base">
+            </div>
+
+            <button class="btn btn-primary" style="width: 100%;" onclick="executeBenchmark()">
+                Executar Benchmark Completo
+            </button>
+
+            <div id="bench-loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Executando testes de benchmark...</p>
+            </div>
+
+            <div id="bench-results" style="margin-top: 30px;"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/benchmark.js') }}"></script>
+</body>
+</html>

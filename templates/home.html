@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AFIS - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+        }
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .hero-subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 50px;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .feature-card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+        .feature-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        .feature-card h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .feature-card p {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        .gpu-badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <h1>🔐 AFIS System</h1>
+            <p class="hero-subtitle">Sistema de Identificação Automática de Impressões Digitais</p>
+            {% if gpu_available %}
+            <div class="gpu-badge">✅ GPU Disponível</div>
+            {% endif %}
+        </div>
+
+        <div class="button-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h2>Matching 1:N</h2>
+                <p>Busque uma impressão digital em toda a base de dados. Visualize os resultados com imagens lado a lado.</p>
+                <a href="/matching" class="btn btn-primary">Iniciar Matching</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h2>Benchmark</h2>
+                <p>Compare a performance entre CPU (1, 4, 8 núcleos) e GPU. Métricas detalhadas de speedup e eficiência.</p>
+                <a href="/benchmark" class="btn btn-primary">Executar Benchmark</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
